@@ -2,11 +2,16 @@ import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidate } from "../utils/validate";
 import { auth } from "../utils/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { addUser } from "../utils/userSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [isSignInForm, setIsSignForm] = useState(true);
   const [errorMessage,setErrorMessage] =useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const email = useRef(null);
   const password = useRef(null)
@@ -14,7 +19,7 @@ const Login = () => {
 
   const handleButtonClick = () => {
     
-    const msg = checkValidate(email.current.value,password.current.value,fullName.current.value);
+    const msg = checkValidate(email.current.value,password.current.value);
     setErrorMessage(msg)
     console.log("msg",msg )
 
@@ -25,7 +30,22 @@ const Login = () => {
       .then((userCredential) => {
         // Signed up 
         const user = userCredential.user;
+        updateProfile(auth.currentUser, {
+          displayName: fullName.current.value, photoURL: "https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg"
+        }).then(() => {
+          // Profile updated!
+          const {uid,email,displayName,photoURL} = auth.currentUser
+          dispatch(addUser({uid,email,displayName,photoURL}))
+          // ...
+          navigate("/browse")
+         
+        }).catch((error) => {
+          // An error occurred
+          // ...
+
+        });
         console.log("user",user)
+       
         // ...
       })
       .catch((error) => {
@@ -43,6 +63,7 @@ const Login = () => {
         // Signed in 
         const user = userCredential.user;
         console.log("user success",user)
+        navigate("/browse")
         // ...
       })
       .catch((error) => {
@@ -82,7 +103,7 @@ const Login = () => {
             {!isSignInForm && (
               <input
                 type="text"
-                // ref={}
+                ref={fullName}
                 placeholder="Full Name"
                 className="p-3 my-4 w-full bg-gray-700 rounded-md"
               />
@@ -100,7 +121,7 @@ const Login = () => {
               className="p-3 my-4 w-full bg-gray-700 rounded-md"
             />
             <p className="text-red-700 font-bold text-lg py-2">{errorMessage}</p>
-            <button className="p-3 my-4 bg-red-700 rounded-lg w-full" onClick={handleButtonClick}>
+            <button className="p-3 my-4 bg-red-700 hover:bg-red-700 transition-all rounded-lg w-full" onClick={handleButtonClick}>
               {isSignInForm ? "Sign In" : "Sign Up"}
             </button>
             <p className="py-4 cursor-pointer" onClick={toggleSignUpInForm}>
