@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 
 import { addUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
+import { BACKGROUND_IMG, USER_LOGO } from "../utils/constants";
 
 const Login = () => {
   const [isSignInForm, setIsSignForm] = useState(true);
@@ -21,7 +22,7 @@ const Login = () => {
     
     const msg = checkValidate(email.current.value,password.current.value);
     setErrorMessage(msg)
-    console.log("msg",msg )
+   
 
     if(msg) return;
 
@@ -31,7 +32,7 @@ const Login = () => {
         // Signed up 
         const user = userCredential.user;
         updateProfile(auth.currentUser, {
-          displayName: fullName.current.value, photoURL: "https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg"
+          displayName: fullName.current.value, photoURL: USER_LOGO
         }).then(() => {
           // Profile updated!
           const {uid,email,displayName,photoURL} = auth.currentUser
@@ -43,15 +44,14 @@ const Login = () => {
           // ...
 
         });
-        console.log("user",user)
+       
        
         // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("ec",errorCode)
-        console.log("em",errorMessage)
+       
         setErrorMessage(errorCode==="auth/invalid-email" ? "Invalid Email" : "")
         // ..
       });
@@ -61,7 +61,7 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
-        console.log("user success",user)
+       
  
         // ...
       })
@@ -71,8 +71,7 @@ const Login = () => {
         // ec auth/invalid-email
         // auth/invalid-credential
         const errorMessage = error.message;
-        console.log("ec",errorCode)
-        console.log("em",errorMessage)
+      
         setErrorMessage(errorCode==="auth/invalid-email" ? "Invalid Email" : "Invalid Credentials")
 
       });
@@ -90,8 +89,8 @@ const Login = () => {
       <Header />
       <div className="relative">
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/03ad76d1-e184-4d99-ae7d-708672fa1ac2/web/IN-en-20241111-TRIFECTA-perspective_149877ab-fcbd-4e4f-a885-8d6174a1ee81_small.jpg"
-          alt="logo"
+          src={BACKGROUND_IMG}
+          alt="bg-img"
           className="w-full h-screen object-cover"
         />
         <div className="absolute inset-0 flex items-center justify-center">
