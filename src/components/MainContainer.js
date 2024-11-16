@@ -10,9 +10,8 @@ const MainContainer = () => {
     const {original_title, overview,id}  = mainMovie;
    
   return (
-    <div>
-  <VideoBackGround movieId={id} title={original_title} overview={overview}  />
- 
+    <div className="relative z-0"> {/* z-0 keeps it behind the SecondaryContainer */}
+    <VideoBackGround movieId={id} title={original_title} overview={overview} />
 </div>
   )
 }

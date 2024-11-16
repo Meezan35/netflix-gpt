@@ -10,7 +10,7 @@ const VideoBackgroundContainer = ({ movieId, title, overview }) => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
-      {/* Video Background */}
+     
       <div className="absolute inset-0">
         <iframe
           className="w-full h-full object-cover"
@@ -21,7 +21,7 @@ const VideoBackgroundContainer = ({ movieId, title, overview }) => {
         ></iframe>
       </div>
 
-      {/* Title and Overlay */}
+     
       <div className="absolute inset-0 flex items-center justify-start px-4 md:px-16 lg:px-32 bg-gradient-to-b from-transparent via-black/60 to-black">
         <VideoTitle title={title} overview={overview} />
       </div>
